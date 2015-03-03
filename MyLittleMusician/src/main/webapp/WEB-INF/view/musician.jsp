@@ -16,8 +16,7 @@
         
         <p>Hello I am Rene Berghuis and I am a fine musician!</p>
         <c:forEach var="mus" items="${musician}">
-           <c:out value="${mus.email}" />
-           <c:out value="${mus.profile}" />
+
         </c:forEach>
     </body>
 </html>

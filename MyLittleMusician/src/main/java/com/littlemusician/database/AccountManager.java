@@ -83,7 +83,7 @@ public class AccountManager {
     public List getAccountData(int id) {
         SessionFactory factory = new Configuration().configure().buildSessionFactory();
         session = factory.openSession();
-        String query = "select acc.user_ID, acc.email, acc.profile from Account as acc where acc.user_ID ='" + id + "'";
+        String query = "select acc.user_ID, acc.email, acc.profile from Account as acc where acc.user_ID =" + id ;
         List musician = session.createQuery(query).list();
         
         
