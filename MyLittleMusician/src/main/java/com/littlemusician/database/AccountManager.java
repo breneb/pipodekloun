@@ -110,6 +110,7 @@ public class AccountManager {
             return false;
         }
     }
+<<<<<<< HEAD
 
     public void insertAccountInformation(int id, String email, String profile) {
         try {
@@ -137,6 +138,14 @@ public class AccountManager {
      session = factory.openSession();
      String query = "select acc.user_ID, acc.email, acc.profile from Account as acc where acc.user_ID ='" + id + "'";
      List musician = session.createQuery(query).list();
+=======
+    
+    public List getAccountData(int id) {
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+        session = factory.openSession();
+        String query = "select acc.user_ID, acc.email, acc.profile from Account as acc where acc.user_ID =" + id ;
+        List musician = session.createQuery(query).list();
+>>>>>>> 1753d9c1d257a9c939fcae255937af2ad58a26e2
         
         
      return musician;
