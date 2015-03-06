@@ -6,6 +6,7 @@
 package com.littlemusician.database;
 
 import java.util.Iterator;
+import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -37,5 +38,18 @@ public class LoginManager {
         } else {
             return false;
         }
+    }
+    
+    public List getAccount(String username) {
+        List list;
+        
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+        session = factory.openSession();
+        String query = "select log.id, log.username from Login as log where log.username='" + username + "'";
+        Query DBQuery = session.createQuery(query);
+        list = DBQuery.list();
+        System.out.println(list);
+        
+        return list;
     }
 }

@@ -5,15 +5,19 @@
  */
 package com.littlemusician.mylittlemusician;
 
+import com.littlemusician.database.Account;
 import com.littlemusician.database.AccountManager;
+import com.littlemusician.database.Login;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -23,7 +27,8 @@ import javax.servlet.http.HttpServletResponse;
     "/index",
     "/musician",
     "/login",
-    "/registration"
+    "/registration",
+    "/signup"
 })
 public class ControllerServlet extends HttpServlet {
 
@@ -36,6 +41,8 @@ public class ControllerServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    HttpSession session;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userPath = request.getServletPath();
@@ -44,20 +51,27 @@ public class ControllerServlet extends HttpServlet {
             userPath = "/index";
         }
         if (userPath.equals("/login")) {
+
             String username = request.getParameter("username");
             String password = request.getParameter("password");
 
             AccountManager manager = new AccountManager();
             if (manager.isValidLogin(username, password)) {
 
-                getServletContext().setAttribute("username", username);
-                
-                List musician = manager.getAccountData(2);
+                Login login = manager.getId(username);
+                session = request.getSession();
+                session.setAttribute("username", login.getUsername());
+                session.setAttribute("id", login.getId());
+
+                Account musician = manager.getAccountData((int) session.getAttribute("id"));
                 getServletContext().setAttribute("musician", musician);
                 userPath = "/musician";
             } else {
                 userPath = "/index";
             }
+        }
+        if (userPath.equals("/signup")) {
+            userPath = "/signup";
         }
         if (userPath.equals("/registration")) {
             String username = request.getParameter("username");
@@ -65,22 +79,30 @@ public class ControllerServlet extends HttpServlet {
             String password2 = request.getParameter("password2");
             if (password1.equals(password2)) {
                 AccountManager manager = new AccountManager();
-                if(manager.isValidUsername(username)) {
+                if (manager.isValidUsername(username)) {
                     manager.userInsert(username, password1);
-                    request.setAttribute("success", username + " successfully registered!");
-                    userPath = "/index";
-                }
-                else {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("username", username);
+                    session.setAttribute("success", username + " successfully registered!");
+                    userPath = "/createaccount";
+                } else {
                     request.setAttribute("success", "Username already in use. Choose another one!");
                     userPath = "/index";
                 }
-            }
-            else {
+            } else {
                 request.setAttribute("success", "Retype password again!");
                 request.setAttribute("usernamereg", username);
                 request.setAttribute("password1", password1);
                 userPath = "/index";
             }
+        }
+        if (userPath.equals("/accountinformation")) {
+            HttpSession session = request.getSession();
+            String username = session.getAttribute("username").toString();
+            
+            AccountManager manager = new AccountManager();
+            manager.insertAccountInformation(manager.getId(username).getId(), request.getParameter("email"), request.getParameter("profile"));
+            userPath = "/musician";
         }
 
         String url = "WEB-INF/view" + userPath + ".jsp";

@@ -14,10 +14,8 @@
     <body>
         <h1>Hello ${username}!</h1>
         
-        <p>Hello I am Rene Berghuis and I am a fine musician!</p>
-        <c:forEach var="mus" items="${musician}">
-           <c:out value="${mus.email}" />
-           <c:out value="${mus.profile}" />
-        </c:forEach>
+        <p>${musician.getProfile()}</p>
+        <p>${musician.getEmail()}</p>
+         
     </body>
 </html>
