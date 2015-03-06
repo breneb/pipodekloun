@@ -14,15 +14,15 @@
     <body>
         <h1>Hello ${username}!</h1>
         
-<<<<<<< HEAD
+
         <p>${musician.getProfile()}</p>
         <p>${musician.getEmail()}</p>
          
-=======
+
         <p>Hello I am Rene Berghuis and I am a fine musician!</p>
         <c:forEach var="mus" items="${musician}">
 
         </c:forEach>
->>>>>>> 1753d9c1d257a9c939fcae255937af2ad58a26e2
+
     </body>
 </html>

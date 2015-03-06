@@ -110,7 +110,6 @@ public class AccountManager {
             return false;
         }
     }
-<<<<<<< HEAD
 
     public void insertAccountInformation(int id, String email, String profile) {
         try {
